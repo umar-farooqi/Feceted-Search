@@ -1,12 +1,15 @@
+first create type ===
 create or replace type t_emp_row as object(
 NATURE          VARCHAR2(150),
 MARLA   VARCHAR2(50),
 CATEGORY    VARCHAR2(50)
 
    );
+second create table =======
 
    create or replace type t_emp_table as table of t_emp_row;
 
+Third create function and put the column you need  ======
 
    create or replace function get_faceted_search_data( 
     p_page_id          in number,
@@ -38,7 +41,7 @@ begin
     l_context := apex_region.open_query_context(
                      p_page_id      => p_page_id,
                      p_region_id    => l_region_id );
- get_column_indexes(wwv_flow_t_varchar2('NATURE','MARLA','CATEGORY') );
+ get_column_indexes(wwv_flow_t_varchar2('NATURE','MARLA','CATEGORY') );                    ==== put the your column 
 
     while apex_exec.next_row( p_context => l_context ) loop
         pipe row( t_emp_row(
