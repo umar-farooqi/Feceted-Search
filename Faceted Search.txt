@@ -1,11 +1,14 @@
-first create type ===
+
 create or replace type t_emp_row as object(
+    ID NUMBER,
 NATURE          VARCHAR2(150),
 MARLA   VARCHAR2(50),
-CATEGORY    VARCHAR2(50)
+CATEGORY    VARCHAR2(50),
+BATCH_NO VARCHAR2(50),
+CLIENT_RECIEVABLE NUMBER
 
    );
-second create table =======
+
 
    create or replace type t_emp_table as table of t_emp_row;
 
@@ -41,13 +44,16 @@ begin
     l_context := apex_region.open_query_context(
                      p_page_id      => p_page_id,
                      p_region_id    => l_region_id );
- get_column_indexes(wwv_flow_t_varchar2('NATURE','MARLA','CATEGORY') );                    ==== put the your column 
+ get_column_indexes(wwv_flow_t_varchar2('ID','NATURE','MARLA','CATEGORY','BATCH_NO', 'CLIENT_RECIEVABLE') );              
 
     while apex_exec.next_row( p_context => l_context ) loop
         pipe row( t_emp_row(
+            apex_exec.get_number( p_context => l_context, p_column_idx => l_col_index( 'ID' ) ),
                       apex_exec.get_varchar2( p_context => l_context, p_column_idx => l_col_index( 'NATURE' ) ),
                       apex_exec.get_varchar2( p_context => l_context, p_column_idx => l_col_index( 'MARLA' ) ),
-                      apex_exec.get_varchar2( p_context => l_context, p_column_idx => l_col_index( 'CATEGORY' ) ) ));
+                      apex_exec.get_varchar2( p_context => l_context, p_column_idx => l_col_index( 'CATEGORY' ) ),
+                      apex_exec.get_varchar2( p_context => l_context, p_column_idx => l_col_index( 'BATCH_NO' ) ),
+                        apex_exec.get_number( p_context => l_context, p_column_idx => l_col_index( 'CLIENT_RECIEVABLE' ) ) ));
     end loop;
 
     apex_exec.close( l_context );
@@ -61,3 +67,9 @@ exception
         apex_exec.close( l_context );
         raise;
 end get_faceted_search_data;
+
+
+
+
+
+
