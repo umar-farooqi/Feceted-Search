@@ -67,4 +67,4 @@ exception
         raise;
 end get_faceted_search_inventory;
 
-select ename, sal from table(get_faceted_search_data(:APP_PAGE_ID, 'FC_EMP'));
+select ename, sal from table(get_faceted_search_inventory(:APP_PAGE_ID, 'FC_EMP'));
