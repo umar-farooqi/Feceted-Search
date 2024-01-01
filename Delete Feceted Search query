@@ -1,0 +1,13 @@
+DROP TYPE t_emp_row;
+
+
+SELECT *
+FROM USER_DEPENDENCIES
+WHERE REFERENCED_NAME = 'T_EMP_ROW';
+
+
+
+DROP TYPE t_emp_row;
+
+
+DROP FUNCTION get_faceted_search_data;
