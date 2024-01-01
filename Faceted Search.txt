@@ -1,5 +1,5 @@
 create or replace type t_emp_row as object(
-    ID NUMBER,
+ID NUMBER,
 NATURE          VARCHAR2(150),
 MARLA   VARCHAR2(50),
 CATEGORY    VARCHAR2(50),
