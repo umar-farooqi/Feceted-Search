@@ -7,12 +7,14 @@ BATCH_NO VARCHAR2(50),
 CLIENT_RECIEVABLE NUMBER,
 DOWNPAYMENT_PERCENTAGE NUMBER,
 DISCOUNT_AMOUNT NUMBER,
-BOOKED_PRICE_WITHOUT_TAX NUMBER
+BOOKED_PRICE_WITHOUT_TAX NUMBER,
+RECEIVED_AMT NUMBER
 
    );
 
 
    create or replace type t_emp_table as table of t_emp_row;
+
 
 Third create function and put the column you need  ======
 
@@ -46,7 +48,7 @@ begin
     l_context := apex_region.open_query_context(
                      p_page_id      => p_page_id,
                      p_region_id    => l_region_id );
- get_column_indexes(wwv_flow_t_varchar2('ID','NATURE','MARLA','CATEGORY','BATCH_NO', 'CLIENT_RECIEVABLE', 'DOWNPAYMENT_PERCENTAGE', 'DISCOUNT_AMOUNT', 'BOOKED_PRICE_WITHOUT_TAX') );              
+ get_column_indexes(wwv_flow_t_varchar2('ID','NATURE','MARLA','CATEGORY','BATCH_NO', 'CLIENT_RECIEVABLE', 'DOWNPAYMENT_PERCENTAGE', 'DISCOUNT_AMOUNT', 'BOOKED_PRICE_WITHOUT_TAX','RECEIVED_AMT') );              
 
     while apex_exec.next_row( p_context => l_context ) loop
         pipe row( t_emp_row(
@@ -58,7 +60,8 @@ begin
                         apex_exec.get_number( p_context => l_context, p_column_idx => l_col_index( 'CLIENT_RECIEVABLE' ) ),
                         apex_exec.get_number( p_context => l_context, p_column_idx => l_col_index( 'DOWNPAYMENT_PERCENTAGE' ) ),
                         apex_exec.get_number( p_context => l_context, p_column_idx => l_col_index( 'DISCOUNT_AMOUNT' ) ),
-                        apex_exec.get_number( p_context => l_context, p_column_idx => l_col_index( 'BOOKED_PRICE_WITHOUT_TAX' ) ) ));
+                        apex_exec.get_number( p_context => l_context, p_column_idx => l_col_index( 'BOOKED_PRICE_WITHOUT_TAX' ) ),
+                         apex_exec.get_number( p_context => l_context, p_column_idx => l_col_index( 'RECEIVED_AMT' ) ) ));
     end loop;
 
     apex_exec.close( l_context );
