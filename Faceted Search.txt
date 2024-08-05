@@ -11,7 +11,7 @@ BOOKED_PRICE_WITHOUT_TAX NUMBER,
 RECEIVED_AMT NUMBER
       
    );
-
+ 
 
    create or replace type t_emp_table as table of t_emp_row;
 
