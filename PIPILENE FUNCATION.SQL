@@ -108,4 +108,4 @@ BEGIN
 END;
 /
 
-ye ha object , type ur function   hm function me jo promt pass diya ha wo ha p_org_id       is tarha hmara piplined function banata ha 
+--ye ha object , type ur function   hm function me jo promt pass diya ha wo ha p_org_id       is tarha hmara piplined function banata ha 
