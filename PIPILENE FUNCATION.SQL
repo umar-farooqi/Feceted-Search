@@ -214,3 +214,8 @@ end "AB_REQUEST_STATEMENT";
 
 ---------------------------------------- ye hm ne package ke body bana di ha is me hm ne wo Function add kr diya ha 
 
+---------------  AB HM IS PACKAGE KO CHALA RHY HAN  IS ME WO SARA DATA AYE GA JO HMY CHAYE 
+
+SELECT * 
+FROM TABLE(AB_REQUEST_STATEMENT.REQ_BANK_STATEMENT(:GV_ORG_ID));    -- Ab is me pehly package ha ur phir is package me sy jo function ha us ko hm ne get kia hoa ha phir ye jo :GV_ORG_ID HA wo promt ha
+--- us ki base par wo data aa rha  
