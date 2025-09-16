@@ -121,3 +121,96 @@ END;
 end "AB_REQUEST_STATEMENT";
 /
 
+-- ab hm pacakge ki body banaey gy 
+create or replace package body "AB_REQUEST_STATEMENT" as
+
+
+FUNCTION REQ_BANK_STATEMENT (
+    p_org_id IN NUMBER
+) RETURN Request_of_bank_statement_TYPE PIPELINED
+AS
+BEGIN
+    FOR rec IN (
+        WITH OPENING_BALANCE AS (
+            SELECT
+                ACCOUNT_ID,
+                TR_DATE AS TRANSCATION_DATE,
+                TR_AMOUNT AS OPENING_BALANCE,
+                DEPOSIT_AMOUNT AS SECURITY_DEPOSIT
+            FROM AB_FIN_TRANSACTION TR
+            WHERE TR_TYPE = 625
+              AND ORG_ID = p_org_id
+              AND STATUS = 'Y'
+        ),
+        ACCOUNT_NOO AS (
+            SELECT DISTINCT
+                ASM.ACCOUNT_NUMBER AS ACCOUNT_NO,
+                ASM.SR_ID AS ACCOUNT_ID,
+                OB.OPENING_BALANCE,
+                OB.SECURITY_DEPOSIT
+            FROM AB_SETUP_REGISTRATION ASM
+            JOIN AB_SETUP_REGISTRATION AST 
+                ON AST.SR_ID = ASM.BANK_ID 
+               AND AST.REG_TYPE = 'BANK'
+            LEFT JOIN AB_SETUP_REGISTRATION ASRC 
+                ON ASRC.SR_ID = ASM.COMPANY_ID 
+               AND ASRC.REG_TYPE = 'COMPANY'
+            LEFT JOIN OPENING_BALANCE OB 
+                ON OB.ACCOUNT_ID = ASM.SR_ID
+            WHERE ASM.REG_TYPE IN ('BANK LOV','624')
+              AND ASM.REG_STATUS = 'Y'
+              AND ASM.ORG_ID = p_org_id
+        )
+        SELECT
+            RBS.ID,
+            RBS.BANK_NAME,
+            RBS.BANK_BRANCH,
+            RBS.ACCOUNT_NO AS ACCOUNT_ID,
+            AC.ACCOUNT_NO,
+            AC.OPENING_BALANCE,
+            AC.SECURITY_DEPOSIT,
+            RBS.COMPANY_NAME,
+            RBS.FROM_DATE,
+            RBS.TO_DATES,
+            TO_CHAR(RBS.CREATED_ON,'DD-MON-YYYY') || ' - ' || RBS.CREATED_BY AS ADD_BY,
+            RBS.CREATED_BY,
+            RBS.UPDATED_ON,
+            RBS.UPDATED_BY,
+            RBS.ORG_ID,
+            RBS.STATUS,
+            RBS.SUBJECT,
+            RBS.AUTHORIZE_NAME,
+            RBS.SON_NAME,
+            RBS.CNIC,
+            RBS.REQUEST_DATE,
+            RBS.SUBJECT_DETAIL
+        FROM REQUEST_BANK_STATEMENTS RBS
+        LEFT JOIN ACCOUNT_NOO AC 
+               ON AC.ACCOUNT_ID = RBS.ACCOUNT_NO
+        ORDER BY RBS.ID DESC
+    ) LOOP
+        PIPE ROW (
+                         Request_of_bank_statement(
+      REC.ID ,
+      REC.BANK_NAME ,
+      REC.BANK_BRANCH ,
+      REC.ACCOUNT_NO ,
+      REC.COMPANY_NAME ,
+      REC.FROM_DATE,
+      REC.TO_DATES ,
+      REC.CREATED_BY ,
+      REC.UPDATED_ON ,
+      REC.UPDATED_BY,
+      REC.ORG_ID ,
+      REC.STATUS
+            )
+        );
+    END LOOP;
+
+    RETURN;
+END;
+end "AB_REQUEST_STATEMENT";
+/     
+
+---------------------------------------- ye hm ne package ke body bana di ha is me hm ne wo Function add kr diya ha 
+
