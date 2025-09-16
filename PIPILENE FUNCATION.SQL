@@ -109,3 +109,15 @@ END;
 /
 
 --ye ha object , type ur function   hm function me jo promt pass diya ha wo ha p_org_id       is tarha hmara piplined function banata ha 
+
+
+---phir agr ap ne esy hi function use krna ha to kr skty han agr is ko package ma add krna ha to ap is ko package me add kr skty han 
+-- chaly hm package bi bana lety han 
+                                                                 ---- ab hm ne aik package banaye ha -----------------
+ create or replace package "AB_REQUEST_STATEMENT" as
+  TYPE  Request_of_bank_statement_TYPE IS TABLE  OF Request_of_bank_statement; --<----  ye ham ne pehly type di ha phir hm ne object diya ha  is ka matlb ye ha ke jo object me jo value ha wo type me jay gi
+
+  FUNCTION REQ_BANK_STATEMENT(P_ORG_ID NUMBER) RETURN Request_of_bank_statement_TYPE PIPELINED;  --<<--------- ab hm ne function ka name ur promt idr de diya ha ur ye function phir type return kry ga us type me alredy object ki value aa rhi ha 
+end "AB_REQUEST_STATEMENT";
+/
+
